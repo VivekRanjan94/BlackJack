@@ -4,6 +4,8 @@ import java.util.Collections;
 public class Deck {
     private ArrayList<Card> cards;
     private int iterator;
+    private boolean hasAce;
+    private int sum;
 
     public Deck() {
         this.cards = new ArrayList<>();
@@ -33,6 +35,7 @@ public class Deck {
                 this.cards.add(new Card(10, suit, "Jack"));
 
             }
+            this.hasAce = true;
         }
         iterator = 0;
     }
@@ -43,6 +46,18 @@ public class Deck {
 
     public int getIterator() {
         return iterator++;
+    }
+
+    public boolean deckHasAce() {
+        return this.hasAce;
+    }
+
+    public void setHasAce(boolean hasAce) {
+        this.hasAce = hasAce;
+    }
+
+    public int getSum() {
+        return sum;
     }
 
     public ArrayList<Card> getCards() {
@@ -57,5 +72,13 @@ public class Deck {
 
     public void shuffleCards() {
         Collections.shuffle(this.cards);
+    }
+
+    public void add(Deck hand, Deck deck) {
+        hand.getCards().add(deck.getCards().get(deck.getIterator()));
+        if(hand.getCards().get(hand.getCards().size()-1).isAce()) {
+            hand.setHasAce(true);
+        }
+        this.sum += hand.getCards().get(hand.getCards().size()-1).getValue();
     }
 }

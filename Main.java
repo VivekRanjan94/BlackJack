@@ -1,25 +1,25 @@
 import java.util.Scanner;
 
 public class Main {
-
     public static Scanner sc = new Scanner(System.in);
-
     public static void main(String[] args) {
 
         Deck deck = new Deck();
         deck.shuffleCards();
 
-        Player human = new Player("Vivek", deck);
-        Player house = new Player("Casino", deck);
-
         while(true) {
-
             int play = getInput(true);
 
-            if(play == 1) {
+            System.out.println("Enter your name");
+            String name = sc.nextLine();
+
+            Player human = new Player(name, deck);
+            Player house = new Player("The House", deck);
+
+            while(play == 1) {
                 if(human.getMoney() == 0) {
                     System.out.println("You have run out of money");
-                    break;
+                    return;
                 }
                 int bet;
                 do {
@@ -42,7 +42,8 @@ public class Main {
 
                 if(input == 3) {
                     if(2*bet > human.getMoney()) {
-                       break;
+                        System.out.println("You don't have enough money to double");
+                        break;
                     } else {
                         bet *= 2;
                         human.add(deck);
@@ -50,7 +51,7 @@ public class Main {
 
                 }
 
-                while(house.getSum() <= 15) {
+                while(house.getHand().getSum() <= 15) {
                     house.add(deck);
                 }
 
@@ -69,10 +70,11 @@ public class Main {
                 //Then empty both arraylists
                 human.clear(deck);
                 house.clear(deck);
-            } else {
-                System.out.println("You ended with " + human.getMoney() + "$");
-                break;
+
+                play = getInput(true);
             }
+
+            System.out.println("You ended with " + human.getMoney() + "$");
 
             //restart
         }
@@ -102,7 +104,6 @@ public class Main {
                 input = sc.nextLine();
             }while(!input.equals("0") && !input.equals("1"));
         } else {
-            sc.nextLine();
             while(!input.equals("1") && !input.equals("2") && !input.equals("3")){
                 System.out.println("Enter 1 to hit");
                 System.out.println("Enter 2 to stand");
@@ -115,21 +116,20 @@ public class Main {
     }
 
     public static Player checkWin(Player human, Player house) {
-        if(human.getSum() == 21) {
+        if(human.getHand().getSum() == 21) {
             return human;
-        } else if(house.getSum() == 21) {
+        } else if(house.getHand().getSum() == 21) {
             return house;
-        } else if(human.getSum() > 21) {
+        } else if(human.isBusted()) {
             return house;
-        } else if(house.getSum() > 21) {
+        } else if(house.isBusted()) {
             return human;
-        } else if(human.getSum() > house.getSum()) {
+        } else if(human.getHand().getSum() > house.getHand().getSum()) {
             return human;
-        } else if(human.getSum() < house.getSum()){
+        } else if(human.getHand().getSum() < house.getHand().getSum()){
             return house;
         } else {
             return human;
         }
     }
-
 }

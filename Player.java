@@ -2,16 +2,18 @@ public class Player {
 
     private String name;
     private Deck hand;
-    private int sum;
     private int money;
+    private boolean bust;
 
     public Player(String name, Deck deck) {
         this.name = name;
         this.hand = new Deck(false);
-        this.getHand().getCards().add(deck.getCards().get(deck.getIterator()));
-        this.getHand().getCards().add(deck.getCards().get(deck.getIterator()));
-        this.sum = this.hand.getCards().get(0).getValue() + this.hand.getCards().get(1).getValue();
+
+        hand.add(hand, deck);
+        hand.add(hand, deck);
+
         this.money = 500;
+        this.bust = false;
     }
 
     public String getName() {
@@ -22,17 +24,21 @@ public class Player {
         return hand;
     }
 
-    public int getSum() {
-        return sum;
-    }
-
     public int getMoney() {
         return money;
     }
 
     public void add(Deck deck) {
-        this.hand.getCards().add(deck.getCards().get(deck.getIterator()));
-        this.sum += this.hand.getCards().get(this.hand.getCards().size()-1).getValue();
+        if(!this.bust) {
+            this.hand.add(this.hand, deck);
+            if(this.getHand().getSum() > 21) {
+                this.bust = true;
+            }
+        }
+    }
+
+    public boolean isBusted() {
+        return bust;
     }
 
     public void win(int bet) {
