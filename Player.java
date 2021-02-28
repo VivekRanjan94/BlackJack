@@ -50,8 +50,10 @@ public class Player {
     }
 
     public void clear(Deck deck) {
+        this.bust = false;
         this.hand = new Deck(false);
-        this.getHand().getCards().add(deck.getCards().get(deck.getIterator()));
-        this.getHand().getCards().add(deck.getCards().get(deck.getIterator()));
+        this.add(deck);
+        this.add(deck);
+
     }
 }

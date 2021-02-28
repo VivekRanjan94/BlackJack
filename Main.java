@@ -7,8 +7,9 @@ public class Main {
         Deck deck = new Deck();
         deck.shuffleCards();
 
-        while(true) {
-            int play = getInput(true);
+        int play = 1;
+        while(play == 1) {
+            play = getInput(true);
 
             System.out.println("Enter your name");
             String name = sc.nextLine();
@@ -17,10 +18,16 @@ public class Main {
             Player house = new Player("The House", deck);
 
             while(play == 1) {
+                if(deck.getIterator() == 311) {
+                    deck.shuffleCards();
+                    deck.setIterator(0);
+                }
+
                 if(human.getMoney() == 0) {
                     System.out.println("You have run out of money");
                     return;
                 }
+
                 int bet;
                 do {
                     System.out.println("You have " + human.getMoney() + "$");
@@ -29,6 +36,8 @@ public class Main {
                 } while(!(bet > 0 && bet<=human.getMoney()));
 
                 showHands(human, house, false);
+
+                sc.nextLine();
 
                 int input = getInput(false);
 
@@ -64,8 +73,7 @@ public class Main {
                 } else {
                     human.lose(bet);
                 }
-                System.out.println(checkWin(human, house).getName());
-
+                System.out.println(checkWin(human, house).getName() + " Won!!!");
 
                 //Then empty both arraylists
                 human.clear(deck);
@@ -76,7 +84,7 @@ public class Main {
 
             System.out.println("You ended with " + human.getMoney() + "$");
 
-            //restart
+
         }
     }
 
@@ -95,9 +103,9 @@ public class Main {
     }
 
 
-    public static int getInput(boolean play) {
+    public static int getInput(boolean initial) {
         String input = " ";
-        if(play) {
+        if(initial) {
             do {
                 System.out.println("Enter 0 to quit");
                 System.out.println("Enter 1 to play");

@@ -4,7 +4,7 @@ import java.util.Collections;
 public class Deck {
     private ArrayList<Card> cards;
     private int iterator;
-    private boolean hasAce;
+    private int aces;
     private int sum;
 
     public Deck() {
@@ -35,7 +35,7 @@ public class Deck {
                 this.cards.add(new Card(10, suit, "Jack"));
 
             }
-            this.hasAce = true;
+            this.aces++;
         }
         iterator = 0;
     }
@@ -48,12 +48,12 @@ public class Deck {
         return iterator++;
     }
 
-    public boolean deckHasAce() {
-        return this.hasAce;
+    public int numOfAces() {
+        return this.aces;
     }
 
-    public void setHasAce(boolean hasAce) {
-        this.hasAce = hasAce;
+    public void aceAdded() {
+        this.aces++;
     }
 
     public int getSum() {
@@ -70,6 +70,10 @@ public class Deck {
         }
     }
 
+    public void setIterator(int iterator) {
+        this.iterator = iterator;
+    }
+
     public void shuffleCards() {
         Collections.shuffle(this.cards);
     }
@@ -77,8 +81,27 @@ public class Deck {
     public void add(Deck hand, Deck deck) {
         hand.getCards().add(deck.getCards().get(deck.getIterator()));
         if(hand.getCards().get(hand.getCards().size()-1).isAce()) {
-            hand.setHasAce(true);
+            hand.aceAdded();
         }
         this.sum += hand.getCards().get(hand.getCards().size()-1).getValue();
+
+
+        if(this.aces > 0) {
+            for (Card card : this.cards) {
+                if (card.isAce()) {
+                    if (card.isUsingAceValue()) {
+                        if(this.sum + 10 <= 21) {
+                            card.setValue();
+                            this.sum += 10;
+                        }
+                    } else {
+                        if(this.sum > 21) {
+                            card.setValue();
+                            this.sum -= 10;
+                        }
+                    }
+                }
+            }
+        }
     }
 }
