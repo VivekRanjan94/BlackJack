@@ -11,6 +11,7 @@ public class Player {
         this.getHand().getCards().add(deck.getCards().get(deck.getIterator()));
         this.getHand().getCards().add(deck.getCards().get(deck.getIterator()));
         this.sum = this.hand.getCards().get(0).getValue() + this.hand.getCards().get(1).getValue();
+        this.money = 500;
     }
 
     public String getName() {
@@ -25,8 +26,26 @@ public class Player {
         return sum;
     }
 
+    public int getMoney() {
+        return money;
+    }
+
     public void add(Deck deck) {
         this.hand.getCards().add(deck.getCards().get(deck.getIterator()));
         this.sum += this.hand.getCards().get(this.hand.getCards().size()-1).getValue();
+    }
+
+    public void win(int bet) {
+        this.money += bet;
+    }
+
+    public void lose(int bet) {
+        this.money -= bet;
+    }
+
+    public void clear(Deck deck) {
+        this.hand = new Deck(false);
+        this.getHand().getCards().add(deck.getCards().get(deck.getIterator()));
+        this.getHand().getCards().add(deck.getCards().get(deck.getIterator()));
     }
 }
